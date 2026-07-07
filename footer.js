@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة النهائية الفاخرة لدعم بوابة ديما)
+   SEA CIRCUIT — footer.js (النسخة النهائية المعتمدة لحلول الدفع)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,7 +19,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) شارة ديما التوضيحية الثابتة بصفحة الدفع (Checkout) ---------- */
+/* ---------- 2) هندسة وتنسيق تعليمات بوابة ديما بصفحة الدفع (Checkout) ---------- */
 (function () {
   var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
 
@@ -31,14 +31,14 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   onEcwidReady(function () {
     Ecwid.OnPageLoaded.add(function (page) {
       if (page.type === "CHECKOUT_PAYMENT_DETAILS" || page.type === "CHECKOUT") {
-        setTimeout(addDeemaCheckoutInfo, 400);
+        setTimeout(formatDeemaCheckoutNote, 300);
       }
     });
   });
 
-  setInterval(addDeemaCheckoutInfo, 1000);
+  setInterval(formatDeemaCheckoutNote, 800);
 
-  function addDeemaCheckoutInfo() {
+  function formatDeemaCheckoutNote() {
     var items = document.querySelectorAll(".ec-radiogroup__item");
     if (items.length === 0) return;
 
@@ -49,36 +49,32 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
       var text = item.textContent || "";
       if (text.toLowerCase().indexOf("deema") === -1) return;
 
-      var existing = item.querySelector("#sc-checkout-deema-box");
-      if (existing && existing.dataset.lang === (isAr ? 'ar' : 'en')) return;
-      if (existing) existing.remove();
+      // استهداف صندوق التعليمات الافتراضي المدمج الذي يخرج من لوحة التحكم وتحويله لتصميم فخم ومتناسق
+      var noteEl = item.querySelector(".ec-radiogroup__info");
+      if (!noteEl) return;
 
-      var infoBox = document.createElement("div");
-      infoBox.id = "sc-checkout-deema-box";
-      infoBox.dataset.lang = isAr ? 'ar' : 'en';
+      // منع التكرار وإعطاء الصندوق الهوية البصرية السوداء ذات الحواف النيون
+      noteEl.id = "sc-custom-deema-box";
+      noteEl.style.cssText = 
+        "margin-top:12px !important; padding:12px 15px !important; border:1px solid #00E5FF !important; border-radius:8px !important;" +
+        "font-size:13px !important; line-height:1.6 !important; display:flex !important; align-items:center !important; gap:14px !important;" +
+        "background:#0a0a0a !important; color:#ffffff !important; box-shadow:0 4px 12px rgba(0, 229, 255, 0.08) !important;" +
+        "direction:" + currentDirection + " !important; text-align:" + (isAr ? "right" : "left") + " !important; width:100% !important; box-sizing:border-box !important;";
 
-      // تصميم الصندوق النيون المتناسق هندسياً مع هوية الموقع الفخمة
-      infoBox.style.cssText = 
-        "margin-top:10px; padding:12px 15px; border:1px solid #00E5FF; border-radius:8px;" +
-        "font-size:13px; line-height:1.5; display:flex; align-items:center; gap:12px;" +
-        "background:#0a0a0a; color:#ffffff !important; box-shadow:0 4px 12px rgba(0, 229, 255, 0.08);" +
-        "direction:" + currentDirection + "; text-align:" + (isAr ? "right" : "left") + "; width:100%; box-sizing:border-box;";
-
-      if (isAr) {
-        infoBox.innerHTML =
-          '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:24px !important; width:auto !important; flex-shrink:0;" />' +
-          '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّط مشترياتك على 2 أو 3 أو 4 دفعات شهرية بدون أي فوائد أو رسوم إضافية عبر ديما.</span>';
-      } else {
-        infoBox.innerHTML =
-          '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:24px !important; width:auto !important; flex-shrink:0;" />' +
-          '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.2px;">Split your payments into 2, 3, or 4 monthly installments with ZERO interest via Deema.</span>';
+      // تعديل خطوط النص الداخلي المكتوب في لوحة التحكم ليصبح متوهجاً وواضحاً بالكامل
+      var innerTextSpan = noteEl.querySelector("span, div, p") || noteEl;
+      if (innerTextSpan) {
+        innerTextSpan.style.cssText = "color:#ffffff !important; font-family:" + (isAr ? "'Cairo'" : "'Orbitron'") + ", sans-serif !important; font-weight:700 !important;";
       }
 
-      var container = item.querySelector(".ec-radiogroup__info, .ec-radiogroup__container");
-      if (container) {
-        container.appendChild(infoBox);
-      } else {
-        item.appendChild(infoBox);
+      // حقن الشعار عالي الدقة في بداية الصندوق إذا لم يكن موجوداً لمنع تكراره
+      if (!noteEl.querySelector(".sc-injected-logo")) {
+        var img = document.createElement("img");
+        img.src = DEEMA_LOGO_URL;
+        img.alt = "Deema";
+        img.className = "sc-injected-logo";
+        img.style.cssText = "height:26px !important; width:auto !important; flex-shrink:0 !important; vertical-align:middle !important;";
+        noteEl.insertBefore(img, noteEl.firstChild);
       }
     });
   }
