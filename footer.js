@@ -111,7 +111,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     } else {
       badge.innerHTML =
         '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
-        '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.3px;">Split it with Deema: 2 payments (' + p2 + ' KD), 3 payments (' + p3 + ' KD), or 4 payments (' + p4 + ' KD)</span>';
+        '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.3px;">Split it with deema: 2 payments (' + p2 + ' KD), 3 payments (' + p3 + ' KD), or 4 payments (' + p4 + ' KD)</span>';
     }
 
     targetPriceEl.insertAdjacentElement("afterend", badge);
