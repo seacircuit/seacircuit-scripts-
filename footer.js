@@ -79,29 +79,28 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   });
 })();
 
-/* ---------- 5) شارة ديما + عداد كمية للموبايل بصفحة المنتج (وضع تجربة: منتج Poseidon Pro برقمه المباشر) ---------- */
+/* ---------- 5) شارة ديما + عداد كمية للموبايل بصفحة المنتج (وضع تجربة: منتج Poseidon Pro) ---------- */
 (function () {
-  var TEST_PRODUCT_ID = 797890569; // رقم منتج Poseidon Pro — غيّرها إلى null لتفعيلها على كل المنتجات
+  // تعرّف على صفحة المنتج مباشرة من رابط الصفحة (أضمن من الاعتماد على توقيت حدث Ecwid فقط)
+  var TEST_URL_SLUG = "poseidon-pro"; // غيّرها إلى null لتفعيلها على كل المنتجات
 
-  function onEcwidReady3(cb) {
-    if (window.Ecwid && window.Ecwid.OnAPILoaded) { Ecwid.OnAPILoaded.add(cb); }
-    else { setTimeout(function () { onEcwidReady3(cb); }, 300); }
+  function isTestProductPage() {
+    if (!TEST_URL_SLUG) return true;
+    return location.pathname.toLowerCase().indexOf(TEST_URL_SLUG) !== -1;
   }
 
-  onEcwidReady3(function () {
-    Ecwid.OnPageLoaded.add(function (page) {
-      if (page.type !== "PRODUCT") return;
-      if (TEST_PRODUCT_ID && page.productId !== TEST_PRODUCT_ID) return;
-      setTimeout(function () {
-        addDeemaProductBadge();
-        addQuantityStepper();
-      }, 400);
-    });
-  });
+  function tryRun() {
+    if (!isTestProductPage()) return;
+    addDeemaProductBadge();
+    addQuantityStepper();
+  }
+
+  // فحص فوري + فحص متكرر كل ثانية (يغطي التحميل الأول والتنقل بين المنتجات بدون انتظار حدث معيّن)
+  tryRun();
+  setInterval(tryRun, 1000);
 
   function addDeemaProductBadge() {
-    var existing = document.getElementById("sc-deema-badge");
-    if (existing) existing.remove();
+    if (document.getElementById("sc-deema-badge")) return; // موجودة أصلاً، لا داعي لإعادة الإضافة
     var priceEl = document.querySelector(
       ".product-details__product-price, .details-product-purchase__price, .product-details__price, .ecwid-productBrowser-price"
     );
