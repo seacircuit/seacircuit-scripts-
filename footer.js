@@ -78,3 +78,89 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     });
   });
 })();
+
+/* ---------- 5) شارة ديما + عداد كمية للموبايل بصفحة المنتج (وضع تجربة: منتج Poseidon Pro برقمه المباشر) ---------- */
+(function () {
+  var TEST_PRODUCT_ID = 797890569; // رقم منتج Poseidon Pro — غيّرها إلى null لتفعيلها على كل المنتجات
+
+  function onEcwidReady3(cb) {
+    if (window.Ecwid && window.Ecwid.OnAPILoaded) { Ecwid.OnAPILoaded.add(cb); }
+    else { setTimeout(function () { onEcwidReady3(cb); }, 300); }
+  }
+
+  onEcwidReady3(function () {
+    Ecwid.OnPageLoaded.add(function (page) {
+      if (page.type !== "PRODUCT") return;
+      if (TEST_PRODUCT_ID && page.productId !== TEST_PRODUCT_ID) return;
+      setTimeout(function () {
+        addDeemaProductBadge();
+        addQuantityStepper();
+      }, 400);
+    });
+  });
+
+  function addDeemaProductBadge() {
+    var existing = document.getElementById("sc-deema-badge");
+    if (existing) existing.remove();
+    var priceEl = document.querySelector(
+      ".details-product-purchase__price, .product-details__price, .ecwid-productBrowser-price"
+    );
+    if (!priceEl) return;
+    var priceText = priceEl.textContent.replace(/[^\d.]/g, "");
+    var price = parseFloat(priceText);
+    if (!price || isNaN(price)) return;
+    var MIN_PRICE_FOR_BADGE = 7;
+    if (price < MIN_PRICE_FOR_BADGE) return;
+    var lowestPerPayment = (price / 4).toFixed(3);
+    var badge = document.createElement("div");
+    badge.id = "sc-deema-badge";
+    badge.style.cssText =
+      "margin:8px 0;padding:8px 10px;border:1px solid #eee;border-radius:8px;" +
+      "font-size:13px;line-height:1.5;display:flex;align-items:center;gap:6px;" +
+      "background:#fafafa;direction:rtl;";
+    badge.innerHTML =
+      '<span style="font-weight:600;">قسّطها مع ديما</span>' +
+      '<span>— ابتداءً من ' + lowestPerPayment + ' د.ك / 4 دفعات</span>';
+    priceEl.insertAdjacentElement("afterend", badge);
+  }
+
+  function addQuantityStepper() {
+    if (window.innerWidth > 767) return;
+    var qtyInput = document.querySelector(
+      'input[name="quantity"], .details-product-purchase__quantity input, .form-control__quantity'
+    );
+    if (!qtyInput) return;
+    if (qtyInput.dataset.scStepperAdded) return;
+    qtyInput.dataset.scStepperAdded = "true";
+    var wrapper = document.createElement("div");
+    wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
+    var minusBtn = document.createElement("button");
+    minusBtn.type = "button";
+    minusBtn.textContent = "−";
+    minusBtn.style.cssText =
+      "width:36px;height:36px;font-size:18px;border:1px solid #ccc;border-radius:6px;background:#fff;";
+    var plusBtn = document.createElement("button");
+    plusBtn.type = "button";
+    plusBtn.textContent = "+";
+    plusBtn.style.cssText = minusBtn.style.cssText;
+    qtyInput.style.cssText += "text-align:center;width:50px;";
+    qtyInput.parentNode.insertBefore(wrapper, qtyInput);
+    wrapper.appendChild(minusBtn);
+    wrapper.appendChild(qtyInput);
+    wrapper.appendChild(plusBtn);
+    function fireChange() {
+      qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
+      qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    minusBtn.addEventListener("click", function () {
+      var val = parseInt(qtyInput.value, 10) || 1;
+      if (val > 1) qtyInput.value = val - 1;
+      fireChange();
+    });
+    plusBtn.addEventListener("click", function () {
+      var val = parseInt(qtyInput.value, 10) || 1;
+      qtyInput.value = val + 1;
+      fireChange();
+    });
+  }
+})();
