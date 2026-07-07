@@ -79,10 +79,10 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   });
 })();
 
-/* ---------- 5) شارة ديما + عداد كمية للموبايل بصفحة المنتج (وضع تجربة: منتج Poseidon Pro) ---------- */
+/* ---------- 5) شارة ديما + عداد كمية للموبايل بصفحة المنتج (مفعّلة على كل المنتجات) ---------- */
 (function () {
-  // تعرّف على صفحة المنتج مباشرة من رابط الصفحة (أضمن من الاعتماد على توقيت حدث Ecwid فقط)
-  var TEST_URL_SLUG = "poseidon-pro"; // غيّرها إلى null لتفعيلها على كل المنتجات
+  var TEST_URL_SLUG = null; // مفعّلة على كل المنتجات الآن (كانت "poseidon-pro" لوضع التجربة)
+  var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
 
   function isTestProductPage() {
     if (!TEST_URL_SLUG) return true;
@@ -95,31 +95,43 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     addQuantityStepper();
   }
 
-  // فحص فوري + فحص متكرر كل ثانية (يغطي التحميل الأول والتنقل بين المنتجات بدون انتظار حدث معيّن)
   tryRun();
   setInterval(tryRun, 1000);
 
   function addDeemaProductBadge() {
-    if (document.getElementById("sc-deema-badge")) return; // موجودة أصلاً، لا داعي لإعادة الإضافة
     var priceEl = document.querySelector(
       ".product-details__product-price, .details-product-purchase__price, .product-details__price, .ecwid-productBrowser-price"
     );
     if (!priceEl) return;
+
     var priceText = priceEl.textContent.replace(/[^\d.]/g, "");
     var price = parseFloat(priceText);
     if (!price || isNaN(price)) return;
+
     var MIN_PRICE_FOR_BADGE = 7;
     if (price < MIN_PRICE_FOR_BADGE) return;
-    var lowestPerPayment = (price / 4).toFixed(3);
+
+    // لو السعر تغيّر (لون/متغير مختلف)، حدّث الأرقام بدل ما نتجاهلها
+    var existing = document.getElementById("sc-deema-badge");
+    if (existing && existing.dataset.price === String(price)) return; // نفس السعر، ما نحتاج نعيد الإضافة
+    if (existing) existing.remove();
+
+    var p2 = (price / 2).toFixed(3);
+    var p3 = (price / 3).toFixed(3);
+    var p4 = (price / 4).toFixed(3);
+
     var badge = document.createElement("div");
     badge.id = "sc-deema-badge";
+    badge.dataset.price = String(price);
     badge.style.cssText =
-      "margin:8px 0;padding:8px 10px;border:1px solid #eee;border-radius:8px;" +
-      "font-size:13px;line-height:1.5;display:flex;align-items:center;gap:6px;" +
-      "background:#fafafa;direction:rtl;";
+      "margin:8px 0;padding:10px 12px;border:1px solid #eee;border-radius:8px;" +
+      "font-size:12.5px;line-height:1.6;display:flex;align-items:center;gap:8px;" +
+      "background:#fafafa;direction:rtl;flex-wrap:wrap;";
+
     badge.innerHTML =
-      '<span style="font-weight:600;">قسّطها مع ديما</span>' +
-      '<span>— ابتداءً من ' + lowestPerPayment + ' د.ك / 4 دفعات</span>';
+      '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:20px;width:auto;flex-shrink:0;" />' +
+      '<span>قسّطها مع ديما: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
+
     priceEl.insertAdjacentElement("afterend", badge);
   }
 
