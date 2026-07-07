@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة النهائية النقية - حسم التاريخ)
+   SEA CIRCUIT — footer.js (النسخة النهائية الشاملة للأيقونات والتاريخ)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,20 +19,56 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) تنظيف خلفيات معلومات الدفع الافتراضية لمنصة Ecwid ---------- */
+/* ---------- 2) تنظيف وإضافة أيقونات الدفع المحددة لحسابي (كي نت، فيزا، ماستركارد، آبل باي، جوجل باي) ---------- */
 (function() {
   var style = document.createElement('style');
   style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
   document.head.appendChild(style);
+
+  function injectHesabeLogos() {
+    var items = document.querySelectorAll(".ec-radiogroup__item");
+    items.forEach(function(item) {
+      var text = item.textContent || "";
+      if (text.indexOf("Hesabe") !== -1 || text.indexOf("حسابي") !== -1) {
+        var container = item.querySelector(".ec-radiogroup__title, .ec-radiogroup__label-title");
+        if (!container) return;
+        if (item.querySelector(".sc-hesabe-container")) return;
+
+        // إنشاء وعاء منسق للأيقونات بجانب الاسم مباشرة ليمنع التكرار والتداخل
+        var logoWrapper = document.createElement("span");
+        logoWrapper.className = "sc-hesabe-container";
+        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-inline-start: 12px !important; vertical-align: middle !important;";
+
+        // روابط الأيقونات الخمسة الرسمية المطلوبة بدقة وحصرياً
+        var icons = [
+          { src: "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg", alt: "Knet" },
+          { src: "https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg", alt: "Visa" },
+          { src: "https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg", alt: "Mastercard" },
+          { src: "https://infiniteapps-988453674.imgix.net/badges/applepay_color.svg", alt: "Apple Pay" },
+          { src: "https://infiniteapps-988453674.imgix.net/badges/googlepay_color.svg", alt: "Google Pay" }
+        ];
+
+        icons.forEach(function(icon) {
+          var img = document.createElement("img");
+          img.src = icon.src;
+          img.alt = icon.alt;
+          img.style.cssText = "height: 18px !important; width: auto !important; display: inline-block !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));";
+          logoWrapper.appendChild(img);
+        });
+
+        container.appendChild(logoWrapper);
+      }
+    });
+  }
+  setInterval(injectHesabeLogos, 800);
 })();
 
-/* ---------- 3) الحل الجذري والنهائي لمنع تكرار وتراكب التاريخ بالتوصيل ---------- */
+/* ---------- 3) الحل الجذري لمنع تكرار وتراكب التاريخ بالتوصيل ---------- */
 (function () {
   function hideFilledPlaceholders() {
     var fields = document.querySelectorAll(".ec-form .form-control__text, .ec-form input, .ec-form select");
     fields.forEach(function (input) {
       
-      // 🔥 استهداف فائق الدقة: منع الكود تماماً من التدخل في أي حقل يحمل سمة التاريخ أو الوقت
       if (
         input.type === 'date' || 
         input.hasAttribute('datepicker') ||
@@ -42,7 +78,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
         input.closest('[class*="date"]') ||
         input.closest('[class*="picker"]')
       ) {
-         return; // تخطي كامل الحقل لحماية التاريخ الأصلي من التكرار
+         return; 
       }
 
       var wrapper = input.closest(".form-control, .ec-form__row");
@@ -67,7 +103,6 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     });
   });
 
-  // فحص دوري ناعم للغاية لضمان ثبات حقول العناوين وحصانة منتقي التاريخ
   setInterval(hideFilledPlaceholders, 600);
 })();
 
