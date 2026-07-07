@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة النهائية - العالمية والديناميكية الشاملة)
+   SEA CIRCUIT — footer.js (النسخة النهائية الفاخرة لدعم بوابة ديما)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,7 +19,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) شارة ديما الديناميكية الاحترافية بصفحة الدفع (Checkout) ---------- */
+/* ---------- 2) شارة ديما التوضيحية الثابتة بصفحة الدفع (Checkout) ---------- */
 (function () {
   var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
 
@@ -36,76 +36,44 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     });
   });
 
-  // فحص مستمر لضمان الحقن حتى لو تغيرت الخيارات ديناميكياً في السلة
   setInterval(addDeemaCheckoutInfo, 1000);
 
   function addDeemaCheckoutInfo() {
     var items = document.querySelectorAll(".ec-radiogroup__item");
     if (items.length === 0) return;
 
-    // 🌐 جلب المجموع الإجمالي الفعلي للفاتورة من نظام Ecwid الداخلي مباشرة
-    var cartTotal = 0;
-    if (window.Ecwid && window.Ecwid.Cart && window.Ecwid.Cart.calculateTotal) {
-      cartTotal = parseFloat(window.Ecwid.Cart.calculateTotal().total || 0);
-    }
-    
-    // محاولة بديلة لقراءة السعر من الواجهة إذا لم يستجب الـ API
-    if (!cartTotal || cartTotal === 0) {
-      var totalEl = document.querySelector(".ec-cart-summary__row--total .ec-cart-summary__price, .ec-cart-summary__total");
-      if (totalEl) {
-        cartTotal = parseFloat(totalEl.textContent.replace(/[^\d.]/g, ""));
-      }
-    }
-
-    if (!cartTotal || isNaN(cartTotal)) return;
-
-    var p2 = (cartTotal / 2).toFixed(3);
-    var p3 = (cartTotal / 3).toFixed(3);
-    var p4 = (cartTotal / 4).toFixed(3);
-
     var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
     var currentDirection = isAr ? "rtl" : "ltr";
 
     items.forEach(function (item) {
       var text = item.textContent || "";
-      // التعرف على خيار ديما سواء كتب العميل اسمها كلاسيكياً أو بالإنجليزية
       if (text.toLowerCase().indexOf("deema") === -1) return;
 
-      // تنظيف وإخفاء السطر الافتراضي المشوه القديم المندمج في عنوان البوابة الأصلية
-      var labelTitle = item.querySelector(".ec-radiogroup__title span, .ec-radiogroup__label");
-      if (labelTitle && labelTitle.innerHTML.indexOf("قسّط") !== -1) {
-         labelTitle.style.display = "none !important";
-         labelTitle.innerHTML = isAr ? "الدفع بالتقسيط عبر ديما" : "Pay via Deema";
-      }
-
       var existing = item.querySelector("#sc-checkout-deema-box");
-      // إعادة البناء والتحديث الفوري في حال تغير إجمالي الفاتورة (مثال إضافة كود خصم أو تغيير الشحن)
-      if (existing && existing.dataset.total === String(cartTotal) && existing.dataset.lang === (isAr ? 'ar' : 'en')) return;
+      if (existing && existing.dataset.lang === (isAr ? 'ar' : 'en')) return;
       if (existing) existing.remove();
 
       var infoBox = document.createElement("div");
       infoBox.id = "sc-checkout-deema-box";
-      infoBox.dataset.total = String(cartTotal);
       infoBox.dataset.lang = isAr ? 'ar' : 'en';
 
-      // تصميم الصندوق المدمج الفاخر (ليتحول من الصندوق الأبيض الافتراضي إلى تصميم متطابق مع صفحة المنتج)
+      // تصميم الصندوق النيون المتناسق هندسياً مع هوية الموقع الفخمة
       infoBox.style.cssText = 
-        "margin-top:12px; padding:12px 15px; border:1px solid #00E5FF; border-radius:8px;" +
-        "font-size:13px; line-height:1.6; display:flex; align-items:center; gap:12px;" +
+        "margin-top:10px; padding:12px 15px; border:1px solid #00E5FF; border-radius:8px;" +
+        "font-size:13px; line-height:1.5; display:flex; align-items:center; gap:12px;" +
         "background:#0a0a0a; color:#ffffff !important; box-shadow:0 4px 12px rgba(0, 229, 255, 0.08);" +
         "direction:" + currentDirection + "; text-align:" + (isAr ? "right" : "left") + "; width:100%; box-sizing:border-box;";
 
       if (isAr) {
         infoBox.innerHTML =
-          '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:26px !important; width:auto !important; flex-shrink:0;" />' +
-          '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">خيارات التقسيط لفاتورتك الحالية: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك) بدون فوائد.</span>';
+          '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:24px !important; width:auto !important; flex-shrink:0;" />' +
+          '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّط مشترياتك على 2 أو 3 أو 4 دفعات شهرية بدون أي فوائد أو رسوم إضافية عبر ديما.</span>';
       } else {
         infoBox.innerHTML =
-          '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:26px !important; width:auto !important; flex-shrink:0;" />' +
-          '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.2px;">Installment plans for your current order: 2 payments (' + p2 + ' KD), 3 payments (' + p3 + ' KD), or 4 payments (' + p4 + ' KD) @ 0% Interest.</span>';
+          '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:24px !important; width:auto !important; flex-shrink:0;" />' +
+          '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.2px;">Split your payments into 2, 3, or 4 monthly installments with ZERO interest via Deema.</span>';
       }
 
-      // البحث عن حاوية البيانات الداخلية وحقن الصندوق الفاخر بداخلها بنجاح
       var container = item.querySelector(".ec-radiogroup__info, .ec-radiogroup__container");
       if (container) {
         container.appendChild(infoBox);
@@ -141,7 +109,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   });
 })();
 
-/* ---------- 4) صندوق ديما العالمي العام بصفحة المنتج (لكافة منتجات الموقع بلا قيود) ---------- */
+/* ---------- 4) صندوق ديما العالمي العام بصفحة المنتج ---------- */
 (function () {
   var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
 
@@ -169,8 +137,6 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     var priceText = targetPriceEl.textContent.replace(/[^\d.]/g, "");
     var price = parseFloat(priceText);
     if (!price || isNaN(price)) return;
-    
-    // 💡 تعديل التعميم الشامل: إظهار الحسبة لأي منتج في الموقع قيمته 7 د.ك فما فوق (تم إلغاء شروط حظر الشركات الأخرى)
     if (price < 7) return;
 
     var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
