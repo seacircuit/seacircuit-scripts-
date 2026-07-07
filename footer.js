@@ -52,7 +52,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
           var img = document.createElement("img");
           img.src = icon.src;
           img.alt = icon.alt;
-          img.style.cssText = "height: 18px !important; width: auto !important; display: inline-block !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));";
+          img.style.cssText = "height: 26px !important; width: auto !important; display: inline-block !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));";
           logoWrapper.appendChild(img);
         });
 
