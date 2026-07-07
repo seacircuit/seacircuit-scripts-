@@ -19,48 +19,74 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) محاذاة يمينية متتابعة وإضافة أيقونات الدفع لحسابي المكبّرة ---------- */
+/* ---------- 2) تنظيف التكرار وإضافة أيقونات الدفع لحسابي المكبّرة (محاذاة يمينية) ---------- */
 (function() {
-  var style = document.createElement('style');
-  style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
-  document.head.appendChild(style);
-
   function injectHesabeLogos() {
     var items = document.querySelectorAll(".ec-radiogroup__item");
     items.forEach(function(item) {
       var text = item.textContent || "";
       if (text.indexOf("Hesabe") !== -1 || text.indexOf("حسابي") !== -1) {
-        var container = item.querySelector(".ec-radiogroup__title, .ec-radiogroup__label-title");
-        if (!container) return;
+        var titleContainer = item.querySelector(".ec-radiogroup__title");
+        if (!titleContainer) return;
+
+        // 1. الحذف الجذري لصور النظام الافتراضية المكررة لمنع التشوه
+        var defaultImages = titleContainer.querySelectorAll(".ec-radiogroup__info-images, div[class*='images']");
+        defaultImages.forEach(function(img) {
+            img.style.setProperty("display", "none", "important");
+            img.remove(); 
+        });
+
         if (item.querySelector(".sc-hesabe-container")) return;
 
-        // وعاء يعتمد التدفق الطبيعي المباشر (inline-flex) ليصطف يميناً بجوار الكلمة فوراً
+        // 2. تحويل الحاوية لـ Flex للحفاظ على الكلمة ودفع الشعارات
+        titleContainer.style.cssText = "display: flex !important; align-items: center !important; width: 100% !important; justify-content: flex-start !important;";
+        
+        var labelText = titleContainer.querySelector(".ec-radiogroup__label-title, span");
+        if (labelText) {
+            labelText.style.flexShrink = "0";
+            labelText.style.margin = "0 !important";
+        }
+
+        // 3. إنشاء وعاء الشعارات الجديد
         var logoWrapper = document.createElement("span");
         logoWrapper.className = "sc-hesabe-container";
-        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-left: 12px !important; margin-right: 12px !important; vertical-align: middle !important; float: none !important;";
+        
+        // 4. ضبط الاتجاه لليمين حسب اللغة: في الإنجليزي أقصى اليمين، وفي العربي بجانب الكلمة التي هي أصلاً باليمين
+        var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
+        
+        if (isAr) {
+            logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-right: 15px !important;";
+        } else {
+            logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-left: auto !important;";
+        }
 
         var icons = [
-          { src: "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg", alt: "Knet" },
-          { src: "https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg", alt: "Visa" },
-          { src: "https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg", alt: "Mastercard" },
-          { src: "https://infiniteapps-988453674.imgix.net/badges/applepay_color.svg", alt: "Apple Pay" },
-          { src: "https://infiniteapps-988453674.imgix.net/badges/googlepay_color.svg", alt: "Google Pay" }
+          "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg",
+          "https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg",
+          "https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg",
+          "https://infiniteapps-988453674.imgix.net/badges/applepay_color.svg",
+          "https://infiniteapps-988453674.imgix.net/badges/googlepay_color.svg"
         ];
 
-        icons.forEach(function(icon) {
+        icons.forEach(function(src) {
           var img = document.createElement("img");
-          img.src = icon.src;
-          img.alt = icon.alt;
-          // التكبير لـ 26px للحصول على مظهر بارز ومتناسق تماماً مع بقية المربعات
-          img.style.cssText = "height: 26px !important; width: auto !important; display: inline-block !important;";
+          img.src = src;
+          // تكبير الحجم إلى 26px كما طلبتِ ليبرز بشكل احترافي
+          img.style.cssText = "height: 26px !important; width: auto !important; object-fit: contain !important; display: block !important;";
           logoWrapper.appendChild(img);
         });
 
-        container.appendChild(logoWrapper);
+        titleContainer.appendChild(logoWrapper);
+        
+        // استعلام ميديا داخلي لتصغير الأيقونات قليلاً في الموبايل لتناسب الشاشة
+        if (window.innerWidth <= 768) {
+            var allIcons = logoWrapper.querySelectorAll("img");
+            allIcons.forEach(function(ic) { ic.style.height = "20px"; });
+        }
       }
     });
   }
-  setInterval(injectHesabeLogos, 800);
+  setInterval(injectHesabeLogos, 400);
 })();
 
 /* ---------- 3) الحل الجذري لمنع تكرار وتراكب التاريخ بالتوصيل ---------- */
