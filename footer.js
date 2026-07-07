@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة الاحترافية الموزونة للشعارات والتاريخ)
+   SEA CIRCUIT — footer.js (النسخة المصححة والموزونة للشعارات)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,7 +19,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) محاذاة يسارية وتكبير أيقونات الدفع لحسابي المتناسقة ---------- */
+/* ---------- 2) إضافة أيقونات الدفع لحسابي جهة اليمين مع الحفاظ على الكلمة مكانها ---------- */
 (function() {
   var style = document.createElement('style');
   style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
@@ -34,10 +34,10 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
         if (!container) return;
         if (item.querySelector(".sc-hesabe-container")) return;
 
-        // وعاء مرن ممتد يدفع الأيقونات لليسار داخل حدود الصندوق تماماً
+        // وعاء منسق يوضع بعد كلمة حسابي مباشرة ليظهر جهة اليمين بشكل متناسق ومطابق للنظام الافتراضي
         var logoWrapper = document.createElement("span");
         logoWrapper.className = "sc-hesabe-container";
-        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-inline-start: auto !important; padding-inline-start: 15px !important; vertical-align: middle !important; float: left !important;";
+        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-inline-start: 12px !important; vertical-align: middle !important;";
 
         var icons = [
           { src: "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg", alt: "Knet" },
@@ -51,8 +51,8 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
           var img = document.createElement("img");
           img.src = icon.src;
           img.alt = icon.alt;
-          // تكبير الحجم إلى 24px ليصبح منسقاً ومطابقاً لوسائل الدفع الأخرى الفاخرة
-          img.style.cssText = "height: 24px !important; width: auto !important; display: inline-block !important;";
+          // حجم متناسق واحترافي ممتاز يتناسب تماماً مع الحقول الأخرى
+          img.style.cssText = "height: 22px !important; width: auto !important; display: inline-block !important;";
           logoWrapper.appendChild(img);
         });
 
