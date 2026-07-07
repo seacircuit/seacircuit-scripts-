@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة النهائية الشاملة للأيقونات والتاريخ)
+   SEA CIRCUIT — footer.js (النسخة الاحترافية الموزونة للشعارات والتاريخ)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,7 +19,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) تنظيف وإضافة أيقونات الدفع المحددة لحسابي (كي نت، فيزا، ماستركارد، آبل باي، جوجل باي) ---------- */
+/* ---------- 2) محاذاة يسارية وتكبير أيقونات الدفع لحسابي المتناسقة ---------- */
 (function() {
   var style = document.createElement('style');
   style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
@@ -34,12 +34,11 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
         if (!container) return;
         if (item.querySelector(".sc-hesabe-container")) return;
 
-        // إنشاء وعاء منسق للأيقونات بجانب الاسم مباشرة ليمنع التكرار والتداخل
+        // وعاء مرن ممتد يدفع الأيقونات لليسار داخل حدود الصندوق تماماً
         var logoWrapper = document.createElement("span");
         logoWrapper.className = "sc-hesabe-container";
-        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-inline-start: 12px !important; vertical-align: middle !important;";
+        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-inline-start: auto !important; padding-inline-start: 15px !important; vertical-align: middle !important; float: left !important;";
 
-        // روابط الأيقونات الخمسة الرسمية المطلوبة بدقة وحصرياً
         var icons = [
           { src: "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg", alt: "Knet" },
           { src: "https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg", alt: "Visa" },
@@ -52,7 +51,8 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
           var img = document.createElement("img");
           img.src = icon.src;
           img.alt = icon.alt;
-          img.style.cssText = "height: 26px !important; width: auto !important; display: inline-block !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));";
+          // تكبير الحجم إلى 24px ليصبح منسقاً ومطابقاً لوسائل الدفع الأخرى الفاخرة
+          img.style.cssText = "height: 24px !important; width: auto !important; display: inline-block !important;";
           logoWrapper.appendChild(img);
         });
 
@@ -68,7 +68,6 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   function hideFilledPlaceholders() {
     var fields = document.querySelectorAll(".ec-form .form-control__text, .ec-form input, .ec-form select");
     fields.forEach(function (input) {
-      
       if (
         input.type === 'date' || 
         input.hasAttribute('datepicker') ||
@@ -80,21 +79,17 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
       ) {
          return; 
       }
-
       var wrapper = input.closest(".form-control, .ec-form__row");
       if (!wrapper) return;
       var placeholder = wrapper.querySelector(".form-control__placeholder, .form-control__placeholder-inner");
       if (!placeholder) return;
-      
       placeholder.style.display = (input.value && input.value.trim() !== "") ? "none" : "block";
     });
   }
-
   function onEcwidReady2(cb) {
     if (window.Ecwid && window.Ecwid.OnAPILoaded) { Ecwid.OnAPILoaded.add(cb); }
     else { setTimeout(function () { onEcwidReady2(cb); }, 300); }
   }
-
   onEcwidReady2(function () {
     Ecwid.OnPageLoaded.add(function () {
       setTimeout(hideFilledPlaceholders, 400);
@@ -102,120 +97,54 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
       document.addEventListener("change", hideFilledPlaceholders, true);
     });
   });
-
   setInterval(hideFilledPlaceholders, 600);
 })();
 
 /* ---------- 4) صندوق ديما العالمي العام بصفحة المنتج ---------- */
 (function () {
   var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
-
-  function tryRun() {
-    addDeemaProductBadge();
-    addQuantityStepper();
-  }
-  tryRun();
-  setInterval(tryRun, 1000);
-
+  function tryRun() { addDeemaProductBadge(); addQuantityStepper(); }
+  tryRun(); setInterval(tryRun, 1000);
   function addDeemaProductBadge() {
     var priceElements = document.querySelectorAll(".product-details__product-price, .details-product-purchase__price, .product-details__price");
     var targetPriceEl = null;
-    
     for (var j = 0; j < priceElements.length; j++) {
       var el = priceElements[j];
-      if (!el.closest('.ec-store__product-page--sticky-panel') && !el.closest('.ec-cart-fixed')) {
-        targetPriceEl = el;
-        break;
-      }
+      if (!el.closest('.ec-store__product-page--sticky-panel') && !el.closest('.ec-cart-fixed')) { targetPriceEl = el; break; }
     }
-    
     if (!targetPriceEl) return;
-
     var priceText = targetPriceEl.textContent.replace(/[^\d.]/g, "");
     var price = parseFloat(priceText);
-    if (!price || isNaN(price)) return;
-    if (price < 7) return;
-
+    if (!price || isNaN(price)) return; if (price < 7) return;
     var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
-
     var existing = document.getElementById("sc-deema-badge");
     if (existing && existing.dataset.price === String(price) && existing.dataset.lang === (isAr ? 'ar' : 'en')) return; 
     if (existing) existing.remove();
-
-    var p2 = (price / 2).toFixed(3);
-    var p3 = (price / 3).toFixed(3);
-    var p4 = (price / 4).toFixed(3);
-
+    var p2 = (price / 2).toFixed(3); var p3 = (price / 3).toFixed(3); var p4 = (price / 4).toFixed(3);
     var badge = document.createElement("div");
-    badge.id = "sc-deema-badge";
-    badge.dataset.price = String(price);
-    badge.dataset.lang = isAr ? 'ar' : 'en';
-    
+    badge.id = "sc-deema-badge"; badge.dataset.price = String(price); badge.dataset.lang = isAr ? 'ar' : 'en';
     var currentDirection = isAr ? "rtl" : "ltr";
-    
-    badge.style.cssText =
-      "margin:12px 0;padding:12px 15px;border:1px solid #00E5FF;border-radius:8px;" +
-      "font-size:13.5px;line-height:1.6;display:flex;align-items:center;gap:12px;" +
-      "background:#0a0a0a;color:#ffffff !important;box-shadow:0 4px 15px rgba(0, 229, 255, 0.1);" +
-      "direction:" + currentDirection + "; text-align:" + (isAr ? "right" : "left") + "; flex-wrap:wrap;";
-
+    badge.style.cssText = "margin:12px 0;padding:12px 15px;border:1px solid #00E5FF;border-radius:8px;font-size:13.5px;line-height:1.6;display:flex;align-items:center;gap:12px;background:#0a0a0a;color:#ffffff !important;box-shadow:0 4px 15px rgba(0, 229, 255, 0.1);direction:" + currentDirection + "; text-align:" + (isAr ? "right" : "left") + "; flex-wrap:wrap;";
     if (isAr) {
-      badge.innerHTML =
-        '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
-        '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّطها مع ديما: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
+      badge.innerHTML = '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" /><span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّطها مع ديما: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
     } else {
-      badge.innerHTML =
-        '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
-        '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.3px;">Split it with Deema: 2 payments (' + p2 + ' KD), 3 payments (' + p3 + ' KD), or 4 payments (' + p4 + ' KD)</span>';
+      badge.innerHTML = '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" /><span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.3px;">Split it with Deema: 2 payments (' + p2 + ' KD), 3 payments (' + p3 + ' KD), or 4 payments (' + p4 + ' KD)</span>';
     }
-
     targetPriceEl.insertAdjacentElement("afterend", badge);
   }
-
   function addQuantityStepper() {
     if (window.innerWidth > 767) return;
     var qtyInput = document.querySelector('input[name="quantity"], .details-product-purchase__quantity input, .form-control__quantity');
-    if (!qtyInput) return;
-    if (qtyInput.dataset.scStepperAdded) return;
-    qtyInput.dataset.scStepperAdded = "true";
-    var wrapper = document.createElement("div");
-    wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
-    var minusBtn = document.createElement("button");
-    minusBtn.type = "button";
-    minusBtn.textContent = "−";
-    minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#000;";
-    var plusBtn = document.createElement("button");
-    plusBtn.type = "button";
-    plusBtn.textContent = "+";
-    plusBtn.style.cssText = minusBtn.style.cssText;
-    qtyInput.style.cssText += "text-align:center;width:50px;color:#000;";
-    qtyInput.parentNode.insertBefore(wrapper, qtyInput);
-    wrapper.appendChild(minusBtn);
-    wrapper.appendChild(qtyInput);
-    wrapper.appendChild(plusBtn);
-    function fireChange() {
-      qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
-      qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-    minusBtn.addEventListener("click", function () {
-      var val = parseInt(qtyInput.value, 10) || 1;
-      if (val > 1) qtyInput.value = val - 1;
-      fireChange();
-    });
-    plusBtn.addEventListener("click", function () {
-      var val = parseInt(qtyInput.value, 10) || 1;
-      qtyInput.value = val + 1;
-      fireChange();
-    });
+    if (!qtyInput) return; if (qtyInput.dataset.scStepperAdded) return; qtyInput.dataset.scStepperAdded = "true";
+    var wrapper = document.createElement("div"); wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
+    var minusBtn = document.createElement("button"); minusBtn.type = "button"; minusBtn.textContent = "−"; minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#000;";
+    var plusBtn = document.createElement("button"); plusBtn.type = "button"; plusBtn.textContent = "+"; plusBtn.style.cssText = minusBtn.style.cssText;
+    qtyInput.style.cssText += "text-align:center;width:50px;color:#000;"; qtyInput.parentNode.insertBefore(wrapper, qtyInput); wrapper.appendChild(minusBtn); wrapper.appendChild(qtyInput); wrapper.appendChild(plusBtn);
+    function fireChange() { qtyInput.dispatchEvent(new Event("change", { bubbles: true })); qtyInput.dispatchEvent(new Event("input", { bubbles: true })); }
+    minusBtn.addEventListener("click", function () { var val = parseInt(qtyInput.value, 10) || 1; if (val > 1) qtyInput.value = val - 1; fireChange(); });
+    plusBtn.addEventListener("click", function () { var val = parseInt(qtyInput.value, 10) || 1; qtyInput.value = val + 1; fireChange(); });
   }
 })();
 
 /* ---------- 5) القنبلة الموقوتة لنسف الشريط الأسود من الموبايل ---------- */
-(function nukeStickyBar() {
-  setInterval(function() {
-    var stickyBars = document.querySelectorAll('.ec-cart-fixed, .ec-store__product-page--sticky-panel, .details-product-purchase__controls--mobile-sticky');
-    stickyBars.forEach(function(bar) { 
-      bar.remove();
-    });
-  }, 500);
-})();
+(function nukeStickyBar() { setInterval(function() { var stickyBars = document.querySelectorAll('.ec-cart-fixed, .ec-store__product-page--sticky-panel, .details-product-purchase__controls--mobile-sticky'); stickyBars.forEach(function(bar) { bar.remove(); }); }, 500); })();
