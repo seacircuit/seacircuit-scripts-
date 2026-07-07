@@ -1,9 +1,9 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة النهائية - مع نسف الشريط الأسود)
+   SEA CIRCUIT — footer.js (النسخة العالمية المحدثة ودعم اللغات)
    ============================================================ */
 
-/* ---------- 1) الخطوط + الفوتر + شعار ديما الجديد ---------- */
-var link=document.createElement('link');link.rel='stylesheet';link.href='https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Orbitron:wght@400;700;900&display=swap';document.head.appendChild(link);
+/* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
+var link=document.createElement('link');link.rel='stylesheet';link.href='https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&family=Orbitron:wght=400;700;900&display=swap';document.head.appendChild(link);
 (function(){
   function i(){
     if(document.getElementById('sc-v135'))return;
@@ -12,7 +12,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     document.head.appendChild(s);
     window.switchScLang=function(l){var p=window.location.pathname;var n=p.replace(/^\/ar\//,'/').replace(/^\/ar$/,'/');if(l==='ar'){window.location.href='/ar'+n}else{window.location.href=n}};
     
-    var h='<div id="sc-v135"><div class="sc-w"><div class="b-en"><span class="sc-t">SEA CIRCUIT CO.</span><div class="sc-d">Retail & Maintenance of Electrical and Electronics Tools</div></div><div class="b-ar"><span class="sc-t">شركة سي سيركت</span><div class="sc-d">للبيع بالتجزئة للأدوات الكهربائية والإلكترونية وصيانتها</div></div><div class="sc-p"><img src="https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876406735.png"><img src="https://infiniteapps-988453674.imgix.net/badges/knet_color.svg"><img src="https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg"><img src="https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg"><img src="https://infiniteapps-988453674.imgix.net/badges/sslsecurecolor_color.svg"></div><div class="sc-g"><div class="sc-col"><div class="b-en"><h4>Experience</h4><ul class="sc-u"><li><a href="/products/pages/about">Our Story</a></li><li><a href="/products/pages/shipping-payment">Delivery</a></li><li><a href="/products/pages/returns">Returns</a></li></ul></div><div class="b-ar"><h4>استكشف التجربة</h4><ul class="sc-u"><li><a href="/ar/products/pages/about">قصة سي سيركت</a></li><li><a href="/ar/products/pages/shipping-payment">الشحن والتسليم</a></li><li><a href="/ar/products/pages/returns">سياسة الاستبدال</a></li></ul></div></div><div class="sc-col"><div class="b-en"><h4>Legal Center</h4><ul class="sc-u"><li><a href="/products/pages/privacy-policy">Privacy Center</a></li><li><a href="/products/pages/terms">Service Terms</a></li><li><a href="mailto:abuse@ecwid.com" style="opacity:0.6">Report Abuse</a></li></ul></div><div class="b-ar"><h4>السياسات</h4><ul class="sc-u"><li><a href="/ar/products/pages/privacy-policy">سياسة الخصوصية</a></li><li><a href="/ar/products/pages/terms">شروط الخدمة</a></li><li><a href="mailto:abuse@ecwid.com" style="opacity:0.6">الإبلاغ عن إساءة</a></li></ul></div></div></div></div><div class="sc-b"><div>&copy; 2026 SEA CIRCUIT | AL-DUBAIYA HQ</div><div class="sc-l"><a onclick="switchScLang(\'en\')">EN</a> | <a onclick="switchScLang(\'ar\')" style="font-family:Cairo!important">العربية</a></div></div></div>';
+    var h='<div id="sc-v135"><div class="sc-w"><div class="b-en"><span class="sc-t">SEA CIRCUIT CO.</span><div class="sc-d">Retail & Maintenance of Electrical and Electronics Tools</div></div><div class="b-ar"><span class="sc-t">شركة سي سيركت</span><div class="sc-d">للبيع بالتجزئة للأدوات الكهربائية والإلكترونية وصيانتها</div></div><div class="sc-p"><img src="https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png"><img src="https://infiniteapps-988453674.imgix.net/badges/knet_color.svg"><img src="https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg"><img src="https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg"><img src="https://infiniteapps-988453674.imgix.net/badges/sslsecurecolor_color.svg"></div><div class="sc-g"><div class="sc-col"><div class="b-en"><h4>Experience</h4><ul class="sc-u"><li><a href="/products/pages/about">Our Story</a></li><li><a href="/products/pages/shipping-payment">Delivery</a></li><li><a href="/products/pages/returns">Returns</a></li></ul></div><div class="b-ar"><h4>استكشف التجربة</h4><ul class="sc-u"><li><a href="/ar/products/pages/about">قصة سي سيركت</a></li><li><a href="/ar/products/pages/shipping-payment">الشحن والتسليم</a></li><li><a href="/ar/products/pages/returns">سياسة الاستبدال</a></li></ul></div></div><div class="sc-col"><div class="b-en"><h4>Legal Center</h4><ul class="sc-u"><li><a href="/products/pages/privacy-policy">Privacy Center</a></li><li><a href="/products/pages/terms">Service Terms</a></li><li><a href="mailto:abuse@ecwid.com" style="opacity:0.6">Report Abuse</a></li></ul></div><div class="b-ar"><h4>السياسات</h4><ul class="sc-u"><li><a href="/ar/products/pages/privacy-policy">سياسة الخصوصية</a></li><li><a href="/ar/products/pages/terms">شروط الخدمة</a></li><li><a href="mailto:abuse@ecwid.com" style="opacity:0.6">الإبلاغ عن إساءة</a></li></ul></div></div></div></div><div class="sc-b"><div>&copy; 2026 SEA CIRCUIT | AL-DUBAIYA HQ</div><div class="sc-l"><a onclick="switchScLang(\'en\')">EN</a> | <a onclick="switchScLang(\'ar\')" style="font-family:Cairo!important">العربية</a></div></div></div>';
     
     var f=document.createElement('div');f.id='sc-v135-c';f.innerHTML=h;document.body.appendChild(f)
   }
@@ -72,9 +72,10 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   });
 })();
 
-/* ---------- 4) صندوق ديما بصفحة المنتج + عداد الكمية ---------- */
+/* ---------- 4) صندوق ديما العالمي بصفحة المنتج (يدعم عربي/إنجليزي + اتجاه صحيح) ---------- */
 (function () {
-  var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876406735.png";
+  // 🚀 تحديث رابط الشعار الجديد المعتمد ذو النص الأبيض
+  var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
 
   function tryRun() {
     addDeemaProductBadge();
@@ -102,8 +103,12 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     if (!price || isNaN(price)) return;
     if (price < 7) return;
 
+    // 🌐 فحص لغة المتجر الحالية ديناميكياً
+    var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
+
     var existing = document.getElementById("sc-deema-badge");
-    if (existing && existing.dataset.price === String(price)) return; 
+    // إعادة البناء فقط إذا تغير السعر أو اللغة
+    if (existing && existing.dataset.price === String(price) && existing.dataset.lang === (isAr ? 'ar' : 'en')) return; 
     if (existing) existing.remove();
 
     var p2 = (price / 2).toFixed(3);
@@ -113,16 +118,27 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     var badge = document.createElement("div");
     badge.id = "sc-deema-badge";
     badge.dataset.price = String(price);
+    badge.dataset.lang = isAr ? 'ar' : 'en';
+    
+    // 🗺️ تحديد اتجاه صندوق العناصر بناءً على اللغة المفتوحة
+    var currentDirection = isAr ? "rtl" : "ltr";
     
     badge.style.cssText =
       "margin:12px 0;padding:12px 15px;border:1px solid #00E5FF;border-radius:8px;" +
       "font-size:13.5px;line-height:1.6;display:flex;align-items:center;gap:12px;" +
-      "background:#0a0a0a;color:#ffffff !important;direction:rtl;flex-wrap:wrap;" +
-      "box-shadow:0 4px 15px rgba(0, 229, 255, 0.1);";
+      "background:#0a0a0a;color:#ffffff !important;box-shadow:0 4px 15px rgba(0, 229, 255, 0.1);" +
+      "direction:" + currentDirection + "; text-align:" + (isAr ? "right" : "left") + "; flex-wrap:wrap;";
 
-    badge.innerHTML =
-      '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:35px !important;width:auto !important;flex-shrink:0;" />' +
-      '<span style="color:#ffffff !important;">قسّطها مع ديما: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
+    // 🔄 حقن المحتوى والخطوط والاتجاه حسب لغة العميل الحالية
+    if (isAr) {
+      badge.innerHTML =
+        '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
+        '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّطها مع ديما: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
+    } else {
+      badge.innerHTML =
+        '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
+        '<span style="color:#ffffff !important; font-family:\'Orbitron\', sans-serif !important; font-weight:700 !important; letter-spacing:0.3px;">Split it with Deema: 2 payments (' + p2 + ' KD), 3 payments (' + p3 + ' KD), or 4 payments (' + p4 + ' KD)</span>';
+    }
 
     targetPriceEl.insertAdjacentElement("afterend", badge);
   }
@@ -170,7 +186,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   setInterval(function() {
     var stickyBars = document.querySelectorAll('.ec-cart-fixed, .ec-store__product-page--sticky-panel, .details-product-purchase__controls--mobile-sticky');
     stickyBars.forEach(function(bar) { 
-      bar.remove(); // يحذف الشريط من جذوره
+      bar.remove();
     });
-  }, 500); // يفحص ويحذف كل نصف ثانية لمنعه من الظهور مجدداً
+  }, 500);
 })();
