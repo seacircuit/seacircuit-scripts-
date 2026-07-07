@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة الإستراتيجية النقية المستقرة)
+   SEA CIRCUIT — footer.js (النسخة الإستراتيجية الشاملة وحلول الدفع والشحن)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,18 +19,48 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) إخفاء وإلغاء خلفيات التظليل الافتراضية لخيارات الدفع لمنع التشويه ---------- */
+/* ---------- 2) حلول خيارات الدفع (تنظيف خلفية ديما + حقن شعار حسابي) ---------- */
 (function() {
   var style = document.createElement('style');
+  // تنظيف أي إطارات عشوائية أو تظليلات غير مرغوبة حول نصوص التعليمات لتظهر بشكل الـ HTML النقي الفاخر
   style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
   document.head.appendChild(style);
+
+  // دالة حقن الشعار المفقود لبوابة حسابي ديناميكياً
+  function injectHesabeLogo() {
+    var items = document.querySelectorAll(".ec-radiogroup__item");
+    items.forEach(function(item) {
+      var text = item.textContent || "";
+      // فحص إذا كان هذا هو خيار بوابة حسابي (Hesabe / حسابي)
+      if (text.indexOf("Hesabe") !== -1 || text.indexOf("حسابي") !== -1) {
+        var container = item.querySelector(".ec-radiogroup__title, .ec-radiogroup__label-title");
+        if (!container) return;
+        // منع تكرار حقن الشعار إذا تم إضافته سابقاً
+        if (item.querySelector(".sc-injected-hesabe")) return;
+
+        var logoImg = document.createElement("img");
+        // جلب شعار شركة حسابي الرسمي المعتمد عالي الدقة والمناسب للخلفيات الفاتحة والداكنة
+        logoImg.src = "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg"; 
+        logoImg.className = "sc-injected-hesabe";
+        logoImg.alt = "Hesabe";
+        logoImg.style.cssText = "height: 20px !important; width: auto !important; margin-inline-start: 10px !important; vertical-align: middle !important; display: inline-block !important;";
+        
+        container.appendChild(logoImg);
+      }
+    });
+  }
+  setInterval(injectHesabeLogo, 800);
 })();
 
-/* ---------- 3) حل تراكب نص التوجيه ---------- */
+/* ---------- 3) حل تراكب نص التوجيه وحل متلازمة تكرار التاريخ ---------- */
 (function () {
   function hideFilledPlaceholders() {
     var fields = document.querySelectorAll(".ec-form .form-control__text, .ec-form input");
     fields.forEach(function (input) {
+      // 🛠️ استثناء ذكي وحاسم: تخطي حقول منتقي التاريخ (Date Pickers) لمنع تراكب الأرقام المكررة البشعة
+      if (input.classList.contains('ec-date-picker__input') || input.closest('.ec-date-picker') || input.type === 'date') {
+         return; 
+      }
       var wrapper = input.closest(".form-control, .ec-form__row");
       if (!wrapper) return;
       var placeholder = wrapper.querySelector(".form-control__placeholder, .form-control__placeholder-inner");
@@ -49,6 +79,8 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
       document.addEventListener("change", hideFilledPlaceholders, true);
     });
   });
+  // فحص دوري ناعم للتأكد من المحاذاة المستمرة لنص التوجيه وحقل التاريخ
+  setInterval(hideFilledPlaceholders, 1000);
 })();
 
 /* ---------- 4) صندوق ديما العالمي العام بصفحة المنتج ---------- */
