@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة النهائية المعتمدة لحلول الدفع)
+   SEA CIRCUIT — footer.js (النسخة الإستراتيجية النقية المستقرة)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,65 +19,11 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) هندسة وتنسيق تعليمات بوابة ديما بصفحة الدفع (Checkout) ---------- */
-(function () {
-  var DEEMA_LOGO_URL = "https://d2j6dbq0eux0bg.cloudfront.net/images/111279331/products/751178105/5876472265.png";
-
-  function onEcwidReady(cb) {
-    if (window.Ecwid && window.Ecwid.OnAPILoaded) { Ecwid.OnAPILoaded.add(cb); }
-    else { setTimeout(function () { onEcwidReady(cb); }, 300); }
-  }
-
-  onEcwidReady(function () {
-    Ecwid.OnPageLoaded.add(function (page) {
-      if (page.type === "CHECKOUT_PAYMENT_DETAILS" || page.type === "CHECKOUT") {
-        setTimeout(formatDeemaCheckoutNote, 300);
-      }
-    });
-  });
-
-  setInterval(formatDeemaCheckoutNote, 800);
-
-  function formatDeemaCheckoutNote() {
-    var items = document.querySelectorAll(".ec-radiogroup__item");
-    if (items.length === 0) return;
-
-    var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
-    var currentDirection = isAr ? "rtl" : "ltr";
-
-    items.forEach(function (item) {
-      var text = item.textContent || "";
-      if (text.toLowerCase().indexOf("deema") === -1) return;
-
-      // استهداف صندوق التعليمات الافتراضي المدمج الذي يخرج من لوحة التحكم وتحويله لتصميم فخم ومتناسق
-      var noteEl = item.querySelector(".ec-radiogroup__info");
-      if (!noteEl) return;
-
-      // منع التكرار وإعطاء الصندوق الهوية البصرية السوداء ذات الحواف النيون
-      noteEl.id = "sc-custom-deema-box";
-      noteEl.style.cssText = 
-        "margin-top:12px !important; padding:12px 15px !important; border:1px solid #00E5FF !important; border-radius:8px !important;" +
-        "font-size:13px !important; line-height:1.6 !important; display:flex !important; align-items:center !important; gap:14px !important;" +
-        "background:#0a0a0a !important; color:#ffffff !important; box-shadow:0 4px 12px rgba(0, 229, 255, 0.08) !important;" +
-        "direction:" + currentDirection + " !important; text-align:" + (isAr ? "right" : "left") + " !important; width:100% !important; box-sizing:border-box !important;";
-
-      // تعديل خطوط النص الداخلي المكتوب في لوحة التحكم ليصبح متوهجاً وواضحاً بالكامل
-      var innerTextSpan = noteEl.querySelector("span, div, p") || noteEl;
-      if (innerTextSpan) {
-        innerTextSpan.style.cssText = "color:#ffffff !important; font-family:" + (isAr ? "'Cairo'" : "'Orbitron'") + ", sans-serif !important; font-weight:700 !important;";
-      }
-
-      // حقن الشعار عالي الدقة في بداية الصندوق إذا لم يكن موجوداً لمنع تكراره
-      if (!noteEl.querySelector(".sc-injected-logo")) {
-        var img = document.createElement("img");
-        img.src = DEEMA_LOGO_URL;
-        img.alt = "Deema";
-        img.className = "sc-injected-logo";
-        img.style.cssText = "height:26px !important; width:auto !important; flex-shrink:0 !important; vertical-align:middle !important;";
-        noteEl.insertBefore(img, noteEl.firstChild);
-      }
-    });
-  }
+/* ---------- 2) إخفاء وإلغاء خلفيات التظليل الافتراضية لخيارات الدفع لمنع التشويه ---------- */
+(function() {
+  var style = document.createElement('style');
+  style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
+  document.head.appendChild(style);
 })();
 
 /* ---------- 3) حل تراكب نص التوجيه ---------- */
@@ -161,7 +107,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     if (isAr) {
       badge.innerHTML =
         '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
-        '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّطها مع ديما: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
+        '<span style="color:#ffffff !important; font-family:\'Cairo\', sans-serif !important; font-weight:700 !important;">قسّطها مع ديمة: 2 دفعات (' + p2 + ' د.ك) أو 3 دفعات (' + p3 + ' د.ك) أو 4 دفعات (' + p4 + ' د.ك)</span>';
     } else {
       badge.innerHTML =
         '<img src="' + DEEMA_LOGO_URL + '" alt="deema" style="height:32px !important;width:auto !important;flex-shrink:0;" />' +
