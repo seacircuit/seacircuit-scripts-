@@ -103,7 +103,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
     var existing = document.getElementById("sc-deema-badge");
     if (existing) existing.remove();
     var priceEl = document.querySelector(
-      ".details-product-purchase__price, .product-details__price, .ecwid-productBrowser-price"
+      ".product-details__product-price, .details-product-purchase__price, .product-details__price, .ecwid-productBrowser-price"
     );
     if (!priceEl) return;
     var priceText = priceEl.textContent.replace(/[^\d.]/g, "");
