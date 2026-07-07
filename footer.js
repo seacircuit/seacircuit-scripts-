@@ -19,71 +19,51 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) تنظيف التكرار وإضافة أيقونات الدفع لحسابي المكبّرة (محاذاة يمينية) ---------- */
+/* ---------- 2) شعارات الدفع لحساب Hesabe (محاذاة يمينية، حجم متناسق، بدون تكرار) ---------- */
 (function() {
   function injectHesabeLogos() {
     var items = document.querySelectorAll(".ec-radiogroup__item");
     items.forEach(function(item) {
       var text = item.textContent || "";
-      if (text.indexOf("Hesabe") !== -1 || text.indexOf("حسابي") !== -1) {
-        var titleContainer = item.querySelector(".ec-radiogroup__title");
-        if (!titleContainer) return;
+      if (text.indexOf("Hesabe") === -1 && text.indexOf("حسابي") === -1) return;
 
-        // 1. الحذف الجذري لصور النظام الافتراضية المكررة لمنع التشوه
-        var defaultImages = titleContainer.querySelectorAll(".ec-radiogroup__info-images, div[class*='images']");
-        defaultImages.forEach(function(img) {
-            img.style.setProperty("display", "none", "important");
-            img.remove(); 
-        });
+      var titleContainer = item.querySelector(".ec-radiogroup__title");
+      if (!titleContainer) return;
 
-        if (item.querySelector(".sc-hesabe-container")) return;
+      // لو شعاراتنا موجودة أصلاً، لا تكرر أي شي
+      if (titleContainer.querySelector(".sc-hesabe-container")) return;
 
-        // 2. تحويل الحاوية لـ Flex للحفاظ على الكلمة ودفع الشعارات
-        titleContainer.style.cssText = "display: flex !important; align-items: center !important; width: 100% !important; justify-content: flex-start !important;";
-        
-        var labelText = titleContainer.querySelector(".ec-radiogroup__label-title, span");
-        if (labelText) {
-            labelText.style.flexShrink = "0";
-            labelText.style.margin = "0 !important";
-        }
+      // إزالة جذرية لأي صور افتراضية موجودة داخل الحاوية (مهما كان اسم صنفها) قبل الإضافة
+      titleContainer.querySelectorAll("img").forEach(function(img) { img.remove(); });
+      titleContainer.querySelectorAll("div[class*='images']").forEach(function(div) { div.remove(); });
 
-        // 3. إنشاء وعاء الشعارات الجديد
-        var logoWrapper = document.createElement("span");
-        logoWrapper.className = "sc-hesabe-container";
-        
-        // 4. ضبط الاتجاه لليمين حسب اللغة: في الإنجليزي أقصى اليمين، وفي العربي بجانب الكلمة التي هي أصلاً باليمين
-        var isAr = document.documentElement.lang === 'ar' || (document.querySelector('html') && document.querySelector('html').getAttribute('lang') === 'ar');
-        
-        if (isAr) {
-            logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-right: 15px !important;";
-        } else {
-            logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-left: auto !important;";
-        }
+      // الحاوية: النص بأوله، الشعارات بآخره (يمين تلقائيًا بغض النظر عن اللغة)
+      titleContainer.style.cssText = "display:flex !important; align-items:center !important; justify-content:space-between !important; width:100% !important;";
 
-        var icons = [
-          "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg",
-          "https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg",
-          "https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg",
-          "https://infiniteapps-988453674.imgix.net/badges/applepay_color.svg",
-          "https://infiniteapps-988453674.imgix.net/badges/googlepay_color.svg"
-        ];
+      var labelText = titleContainer.querySelector(".ec-radiogroup__label-title, span");
+      if (labelText) { labelText.style.flexShrink = "0"; labelText.style.margin = "0 !important"; }
 
-        icons.forEach(function(src) {
-          var img = document.createElement("img");
-          img.src = src;
-          // تكبير الحجم إلى 26px كما طلبتِ ليبرز بشكل احترافي
-          img.style.cssText = "height: 26px !important; width: auto !important; object-fit: contain !important; display: block !important;";
-          logoWrapper.appendChild(img);
-        });
+      var logoWrapper = document.createElement("span");
+      logoWrapper.className = "sc-hesabe-container";
+      logoWrapper.style.cssText = "display:inline-flex !important; align-items:center !important; gap:6px !important;";
 
-        titleContainer.appendChild(logoWrapper);
-        
-        // استعلام ميديا داخلي لتصغير الأيقونات قليلاً في الموبايل لتناسب الشاشة
-        if (window.innerWidth <= 768) {
-            var allIcons = logoWrapper.querySelectorAll("img");
-            allIcons.forEach(function(ic) { ic.style.height = "20px"; });
-        }
-      }
+      var icons = [
+        "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg",
+        "https://infiniteapps-988453674.imgix.net/badges/visa_1_color.svg",
+        "https://infiniteapps-988453674.imgix.net/badges/mastercard_color.svg",
+        "https://infiniteapps-988453674.imgix.net/badges/applepay_color.svg",
+        "https://infiniteapps-988453674.imgix.net/badges/googlepay_color.svg"
+      ];
+
+      var iconHeight = window.innerWidth <= 768 ? "18px" : "24px";
+      icons.forEach(function(src) {
+        var img = document.createElement("img");
+        img.src = src;
+        img.style.cssText = "height:" + iconHeight + " !important; width:auto !important; object-fit:contain !important; display:block !important;";
+        logoWrapper.appendChild(img);
+      });
+
+      titleContainer.appendChild(logoWrapper);
     });
   }
   setInterval(injectHesabeLogos, 400);
@@ -161,7 +141,9 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   function addQuantityStepper() {
     if (window.innerWidth > 767) return;
     var qtyInput = document.querySelector('input[name="quantity"], .details-product-purchase__quantity input, .form-control__quantity');
-    if (!qtyInput) return; if (qtyInput.dataset.scStepperAdded = "true") return; qtyInput.dataset.scStepperAdded = "true";
+    if (!qtyInput) return;
+    if (qtyInput.dataset.scStepperAdded === "true") return; // ✅ تصحيح: كانت = بدل === (تعيين بدل مقارنة، يمنع الميزة من العمل نهائيًا)
+    qtyInput.dataset.scStepperAdded = "true";
     var wrapper = document.createElement("div"); wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
     var minusBtn = document.createElement("button"); minusBtn.type = "button"; minusBtn.textContent = "−"; minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#000;";
     var plusBtn = document.createElement("button"); plusBtn.type = "button"; plusBtn.textContent = "+"; plusBtn.style.cssText = minusBtn.style.cssText;
