@@ -1,5 +1,5 @@
 /* ============================================================
-   SEA CIRCUIT — footer.js (النسخة المصححة والموزونة للشعارات)
+   SEA CIRCUIT — footer.js (النسخة الإستراتيجية النهائية والأدق للشعارات)
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
@@ -19,7 +19,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   i();setInterval(function(){if(!document.getElementById('sc-v135-c'))i()},3000)
 })();
 
-/* ---------- 2) إضافة أيقونات الدفع لحسابي جهة اليمين مع الحفاظ على الكلمة مكانها ---------- */
+/* ---------- 2) محاذاة يمينية متتابعة وإضافة أيقونات الدفع لحسابي المكبّرة ---------- */
 (function() {
   var style = document.createElement('style');
   style.innerHTML = '.ec-radiogroup__item .ec-radiogroup__info { background:transparent !important; border:none !important; padding:0 !important; box-shadow:none !important; }';
@@ -34,10 +34,10 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
         if (!container) return;
         if (item.querySelector(".sc-hesabe-container")) return;
 
-        // وعاء منسق يوضع بعد كلمة حسابي مباشرة ليظهر جهة اليمين بشكل متناسق ومطابق للنظام الافتراضي
+        // وعاء يعتمد التدفق الطبيعي المباشر (inline-flex) ليصطف يميناً بجوار الكلمة فوراً
         var logoWrapper = document.createElement("span");
         logoWrapper.className = "sc-hesabe-container";
-        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-inline-start: 12px !important; vertical-align: middle !important;";
+        logoWrapper.style.cssText = "display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-left: 12px !important; margin-right: 12px !important; vertical-align: middle !important; float: none !important;";
 
         var icons = [
           { src: "https://infiniteapps-988453674.imgix.net/badges/knet_color.svg", alt: "Knet" },
@@ -51,8 +51,8 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
           var img = document.createElement("img");
           img.src = icon.src;
           img.alt = icon.alt;
-          // حجم متناسق واحترافي ممتاز يتناسب تماماً مع الحقول الأخرى
-          img.style.cssText = "height: 22px !important; width: auto !important; display: inline-block !important;";
+          // التكبير لـ 26px للحصول على مظهر بارز ومتناسق تماماً مع بقية المربعات
+          img.style.cssText = "height: 26px !important; width: auto !important; display: inline-block !important;";
           logoWrapper.appendChild(img);
         });
 
@@ -135,7 +135,7 @@ var link=document.createElement('link');link.rel='stylesheet';link.href='https:/
   function addQuantityStepper() {
     if (window.innerWidth > 767) return;
     var qtyInput = document.querySelector('input[name="quantity"], .details-product-purchase__quantity input, .form-control__quantity');
-    if (!qtyInput) return; if (qtyInput.dataset.scStepperAdded) return; qtyInput.dataset.scStepperAdded = "true";
+    if (!qtyInput) return; if (qtyInput.dataset.scStepperAdded = "true") return; qtyInput.dataset.scStepperAdded = "true";
     var wrapper = document.createElement("div"); wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
     var minusBtn = document.createElement("button"); minusBtn.type = "button"; minusBtn.textContent = "−"; minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#000;";
     var plusBtn = document.createElement("button"); plusBtn.type = "button"; plusBtn.textContent = "+"; plusBtn.style.cssText = minusBtn.style.cssText;
