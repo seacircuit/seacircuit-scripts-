@@ -3,7 +3,40 @@
    ============================================================ */
 
 /* ---------- 1) الخطوط + الفوتر + شعار ديما بالفوتر ---------- */
-var link=document.createElement('link');link.rel='stylesheet';link.href='https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&family=Orbitron:wght=400;700;900&display=swap';document.head.appendChild(link);
+/* ============================================================
+   استضافة الخطوط ذاتيًا عبر GitHub Pages بدل Google Fonts
+   يستبدل السطر القديم (var link=document.createElement('link')...)
+   ============================================================ */
+(function () {
+  var fontStyle = document.createElement('style');
+  fontStyle.innerHTML = `
+    @font-face {
+      font-family: 'Cairo';
+      src: url('https://seacircuit.github.io/seacircuit-scripts-/Cairo-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Cairo';
+      src: url('https://seacircuit.github.io/seacircuit-scripts-/Cairo-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Orbitron';
+      src: url('https://seacircuit.github.io/seacircuit-scripts-/Orbitron-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Orbitron';
+      src: url('https://seacircuit.github.io/seacircuit-scripts-/Orbitron-Black.ttf') format('truetype');
+      font-weight: 700 900;
+      font-display: swap;
+    }
+  `;
+  document.head.appendChild(fontStyle);
+})();
 (function(){
   function i(){
     if(document.getElementById('sc-v135'))return;
