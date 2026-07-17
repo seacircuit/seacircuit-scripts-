@@ -240,3 +240,12 @@
   }
   setInterval(highlightBlogLink, 800);
 })();
+
+/* ---------- 9) تحميل مسبق لشعار Deema لتفادي التأخر في صفحة الدفع ---------- */
+(function () {
+  var link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'image';
+  link.href = 'https://payments.seacircuitkw.store/assets/deema-logo-checkout.svg';
+  document.head.appendChild(link);
+})();
