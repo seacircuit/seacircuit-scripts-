@@ -229,3 +229,14 @@
   }
   setInterval(translateBundleAndOutlet, 800);
 })();
+
+/* ---------- 8) تمييز رابط المدونة/Blog بالألوان (سطح المكتب + الموبايل) ---------- */
+(function () {
+  function highlightBlogLink() {
+    document.querySelectorAll('a.ins-header__menu-link-title[href="/ar/blog"], a.ins-header__menu-link-title[href="/blog"]').forEach(function (link) {
+      link.style.setProperty("color", "#00e5ff", "important");
+      link.style.setProperty("font-weight", "700", "important");
+    });
+  }
+  setInterval(highlightBlogLink, 800);
+})();
