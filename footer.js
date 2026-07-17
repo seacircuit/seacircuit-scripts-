@@ -189,3 +189,20 @@
 
 /* ---------- 5) القنبلة الموقوتة لنسف الشريط الأسود من الموبايل ---------- */
 (function nukeStickyBar() { setInterval(function() { var stickyBars = document.querySelectorAll('.ec-cart-fixed, .ec-store__product-page--sticky-panel, .details-product-purchase__controls--mobile-sticky'); stickyBars.forEach(function(bar) { bar.remove(); }); }, 500); })();
+
+/* ---------- 6) ترجمة نص "استلام من الفرع" (Local Pickup Instructions) ---------- */
+(function () {
+  function translatePickupInstructions() {
+    document.querySelectorAll("p").forEach(function (p) {
+      var t = p.textContent.trim();
+      if (t === "Pickup location") {
+        p.innerHTML = "<b>موقع الاستلام</b>";
+      } else if (t === "Business hours") {
+        p.innerHTML = "<b>ساعات العمل</b>";
+      } else if (/AM|PM/.test(t) && /Mon|Fri|Wed|Sun|Sat|Thu/.test(t)) {
+        p.textContent = "الأحد - الأربعاء 11ص-7م، الخميس والجمعة 10ص-10م، السبت 10ص-7م";
+      }
+    });
+  }
+  setInterval(translatePickupInstructions, 800);
+})();
