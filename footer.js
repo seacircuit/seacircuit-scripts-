@@ -206,3 +206,26 @@
   }
   setInterval(translatePickupInstructions, 800);
 })();
+
+/* ---------- 7) ترجمة نص الباقة (Bundle) واسم الفرع (Main Outlet) ---------- */
+(function () {
+  function translateBundleAndOutlet() {
+    // ترجمة "This item can be bought in a bundle:"
+    document.querySelectorAll(".product-details__product-promo-offer span").forEach(function (span) {
+      if (span.innerHTML.indexOf("This item can be bought in a bundle:") !== -1) {
+        span.innerHTML = span.innerHTML.replace(
+          "This item can be bought in a bundle:",
+          "يمكن شراء هذا المنتج ضمن باقة:"
+        );
+      }
+    });
+
+    // ترجمة اسم الفرع "Main Outlet"
+    document.querySelectorAll(".outlet-inventor__title").forEach(function (el) {
+      if (el.textContent.trim() === "Main Outlet") {
+        el.textContent = "الفرع الرئيسي";
+      }
+    });
+  }
+  setInterval(translateBundleAndOutlet, 800);
+})();
