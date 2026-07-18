@@ -172,44 +172,19 @@
     targetPriceEl.insertAdjacentElement("afterend", badge);
   }
   function addQuantityStepper() {
-    // البحث بالاسم والمعرّف الصحيحين
-    var qtyInput = document.getElementById("qty-field")
-                || document.querySelector('input[name="ec-qty"]');
-    if (!qtyInput) return;
+    // ملاحظة: Ecwid يضع أحياناً حقلين بنفس المعرّف qty-field.
+    // لذلك نعالج جميع الحقول المطابقة (querySelectorAll) لا حقلاً واحداً.
+    var qtyFields = document.querySelectorAll('input#qty-field, input[name="ec-qty"]');
+    if (!qtyFields.length) return;
 
-    // ✅ وضع القيمة 1 إذا كان الحقل فارغاً (لكل الأجهزة، ديسكتوب وموبايل)
-    if (qtyInput.value === "" || qtyInput.value == null) {
-      qtyInput.value = "1";
-    }
-
-    // إضافة أزرار +/− للموبايل فقط
-    if (window.innerWidth > 767) return;
-    if (qtyInput.dataset.scStepperAdded === "true") return;
-    qtyInput.dataset.scStepperAdded = "true";
-
-    var wrapper = document.createElement("div");
-    wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
-    var minusBtn = document.createElement("button");
-    minusBtn.type = "button"; minusBtn.textContent = "−";
-    minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #00e5ff;border-radius:6px;background:#222;color:#fff;";
-    var plusBtn = document.createElement("button");
-    plusBtn.type = "button"; plusBtn.textContent = "+";
-    plusBtn.style.cssText = minusBtn.style.cssText;
-    qtyInput.style.cssText += "text-align:center;width:50px;color:#fff;background:#222;";
-    qtyInput.parentNode.insertBefore(wrapper, qtyInput);
-    wrapper.appendChild(minusBtn); wrapper.appendChild(qtyInput); wrapper.appendChild(plusBtn);
-    function fireChange() {
-      qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
-      qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-    minusBtn.addEventListener("click", function () {
-      var val = parseInt(qtyInput.value, 10) || 1;
-      if (val > 1) qtyInput.value = val - 1; fireChange();
+    qtyFields.forEach(function (qtyInput) {
+      // ✅ وضع القيمة 1 إذا كان الحقل فارغاً (لكل الأجهزة، ديسكتوب وموبايل)
+      if (qtyInput.value === "" || qtyInput.value == null) {
+        qtyInput.value = "1";
+      }
     });
-    plusBtn.addEventListener("click", function () {
-      var val = parseInt(qtyInput.value, 10) || 1;
-      qtyInput.value = val + 1; fireChange();
-    });
+    // لا نضيف أزراراً مخصصة — نعتمد على أسهم المتصفح الأصلية (تُظهرها أكواد CSS)
+    // هذا يمنع تكرار/تشوّه الأزرار الناتج عن ازدواج الحقل.
   }
 })();
 
