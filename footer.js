@@ -172,18 +172,44 @@
     targetPriceEl.insertAdjacentElement("afterend", badge);
   }
   function addQuantityStepper() {
-    if (window.innerWidth > 767) return;
-    var qtyInput = document.querySelector('input[name="quantity"], .details-product-purchase__quantity input, .form-control__quantity');
+    // البحث بالاسم والمعرّف الصحيحين
+    var qtyInput = document.getElementById("qty-field")
+                || document.querySelector('input[name="ec-qty"]');
     if (!qtyInput) return;
-    if (qtyInput.dataset.scStepperAdded === "true") return; // ✅ تصحيح: كانت = بدل === (تعيين بدل مقارنة، يمنع الميزة من العمل نهائيًا)
+
+    // ✅ وضع القيمة 1 إذا كان الحقل فارغاً (لكل الأجهزة، ديسكتوب وموبايل)
+    if (qtyInput.value === "" || qtyInput.value == null) {
+      qtyInput.value = "1";
+    }
+
+    // إضافة أزرار +/− للموبايل فقط
+    if (window.innerWidth > 767) return;
+    if (qtyInput.dataset.scStepperAdded === "true") return;
     qtyInput.dataset.scStepperAdded = "true";
-    var wrapper = document.createElement("div"); wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
-    var minusBtn = document.createElement("button"); minusBtn.type = "button"; minusBtn.textContent = "−"; minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#000;";
-    var plusBtn = document.createElement("button"); plusBtn.type = "button"; plusBtn.textContent = "+"; plusBtn.style.cssText = minusBtn.style.cssText;
-    qtyInput.style.cssText += "text-align:center;width:50px;color:#000;"; qtyInput.parentNode.insertBefore(wrapper, qtyInput); wrapper.appendChild(minusBtn); wrapper.appendChild(qtyInput); wrapper.appendChild(plusBtn);
-    function fireChange() { qtyInput.dispatchEvent(new Event("change", { bubbles: true })); qtyInput.dispatchEvent(new Event("input", { bubbles: true })); }
-    minusBtn.addEventListener("click", function () { var val = parseInt(qtyInput.value, 10) || 1; if (val > 1) qtyInput.value = val - 1; fireChange(); });
-    plusBtn.addEventListener("click", function () { var val = parseInt(qtyInput.value, 10) || 1; qtyInput.value = val + 1; fireChange(); });
+
+    var wrapper = document.createElement("div");
+    wrapper.style.cssText = "display:flex;align-items:center;gap:8px;";
+    var minusBtn = document.createElement("button");
+    minusBtn.type = "button"; minusBtn.textContent = "−";
+    minusBtn.style.cssText = "width:36px;height:36px;font-size:18px;border:1px solid #00e5ff;border-radius:6px;background:#222;color:#fff;";
+    var plusBtn = document.createElement("button");
+    plusBtn.type = "button"; plusBtn.textContent = "+";
+    plusBtn.style.cssText = minusBtn.style.cssText;
+    qtyInput.style.cssText += "text-align:center;width:50px;color:#fff;background:#222;";
+    qtyInput.parentNode.insertBefore(wrapper, qtyInput);
+    wrapper.appendChild(minusBtn); wrapper.appendChild(qtyInput); wrapper.appendChild(plusBtn);
+    function fireChange() {
+      qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
+      qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    minusBtn.addEventListener("click", function () {
+      var val = parseInt(qtyInput.value, 10) || 1;
+      if (val > 1) qtyInput.value = val - 1; fireChange();
+    });
+    plusBtn.addEventListener("click", function () {
+      var val = parseInt(qtyInput.value, 10) || 1;
+      qtyInput.value = val + 1; fireChange();
+    });
   }
 })();
 
@@ -207,9 +233,13 @@
   setInterval(translatePickupInstructions, 800);
 })();
 
-/* ---------- 7) ترجمة نص الباقة (Bundle) واسم الفرع (Main Outlet) ---------- */
+/* ---------- 7) ترجمة نص الباقة (Bundle) واسم الفرع (Main Outlet) — بشرط اللغة العربية فقط ---------- */
 (function () {
   function translateBundleAndOutlet() {
+    // لا تترجم إلا في الصفحة العربية (منع ظهور العربية في الصفحة الإنجليزية)
+    var isAr = document.documentElement.lang === 'ar';
+    if (!isAr) return;
+
     // ترجمة "This item can be bought in a bundle:"
     document.querySelectorAll(".product-details__product-promo-offer span").forEach(function (span) {
       if (span.innerHTML.indexOf("This item can be bought in a bundle:") !== -1) {
