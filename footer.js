@@ -171,20 +171,57 @@
     }
     targetPriceEl.insertAdjacentElement("afterend", badge);
   }
-  function addQuantityStepper() {
-    // ملاحظة: Ecwid يضع أحياناً حقلين بنفس المعرّف qty-field.
-    // لذلك نعالج جميع الحقول المطابقة (querySelectorAll) لا حقلاً واحداً.
+ function addQuantityStepper() {
     var qtyFields = document.querySelectorAll('input#qty-field, input[name="ec-qty"]');
     if (!qtyFields.length) return;
-
-    qtyFields.forEach(function (qtyInput) {
-      // ✅ وضع القيمة 1 إذا كان الحقل فارغاً (لكل الأجهزة، ديسكتوب وموبايل)
-      if (qtyInput.value === "" || qtyInput.value == null) {
-        qtyInput.value = "1";
-      }
+    qtyFields.forEach(function (f) {
+      if (f.value === "" || f.value == null) { f.value = "1"; }
     });
-    // لا نضيف أزراراً مخصصة — نعتمد على أسهم المتصفح الأصلية (تُظهرها أكواد CSS)
-    // هذا يمنع تكرار/تشوّه الأزرار الناتج عن ازدواج الحقل.
+    if (window.innerWidth > 767) return;
+    var visibleField = null;
+    for (var k = 0; k < qtyFields.length; k++) {
+      if (qtyFields[k].offsetParent !== null) { visibleField = qtyFields[k]; break; }
+    }
+    if (!visibleField) { visibleField = qtyFields[0]; }
+    qtyFields.forEach(function (f) {
+      if (f !== visibleField) { f.style.display = "none"; }
+    });
+    if (document.getElementById("sc-qty-wrap") &&
+        document.body.contains(document.getElementById("sc-qty-wrap"))) {
+      return;
+    }
+    var wrap = document.createElement("div");
+    wrap.id = "sc-qty-wrap";
+    wrap.style.cssText = "display:flex !important;align-items:center;gap:10px;justify-content:flex-start;";
+    var btnStyle = "width:48px;height:48px;min-width:48px;font-size:26px;line-height:1;border:2px solid #00e5ff;border-radius:8px;background:#111;color:#00e5ff;font-weight:bold;flex-shrink:0;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;display:flex;align-items:center;justify-content:center;";
+    var minusBtn = document.createElement("button");
+    minusBtn.type = "button"; minusBtn.textContent = "−";
+    minusBtn.setAttribute("aria-label", "إنقاص الكمية");
+    minusBtn.style.cssText = btnStyle;
+    var plusBtn = document.createElement("button");
+    plusBtn.type = "button"; plusBtn.textContent = "+";
+    plusBtn.setAttribute("aria-label", "زيادة الكمية");
+    plusBtn.style.cssText = btnStyle;
+    visibleField.style.cssText += "text-align:center;width:60px;min-width:60px;height:48px;color:#fff;background:#111;border:2px solid #00e5ff;border-radius:8px;font-size:20px;font-weight:bold;";
+    visibleField.setAttribute("readonly", "readonly");
+    visibleField.parentNode.insertBefore(wrap, visibleField);
+    wrap.appendChild(minusBtn);
+    wrap.appendChild(visibleField);
+    wrap.appendChild(plusBtn);
+    function fireChange() {
+      visibleField.dispatchEvent(new Event("input", { bubbles: true }));
+      visibleField.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    minusBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var val = parseInt(visibleField.value, 10) || 1;
+      if (val > 1) { visibleField.value = val - 1; fireChange(); }
+    });
+    plusBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var val = parseInt(visibleField.value, 10) || 1;
+      visibleField.value = val + 1; fireChange();
+    });
   }
 })();
 
@@ -246,11 +283,3 @@
   setInterval(highlightBlogLink, 800);
 })();
 
-/* ---------- 9) تحميل مسبق لشعار Deema لتفادي التأخر في صفحة الدفع ---------- */
-(function () {
-  var link = document.createElement('link');
-  link.rel = 'preload';
-  link.as = 'image';
-  link.href = 'https://payments.seacircuitkw.store/assets/deema-logo-checkout.svg';
-  document.head.appendChild(link);
-})();
