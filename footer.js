@@ -254,3 +254,54 @@
   link.href = 'https://payments.seacircuitkw.store/assets/deema-logo-checkout.svg';
   document.head.appendChild(link);
 })();
+
+/* ===== Sea Circuit — شريط التوصيل المجاني في السلة (حد 45 د.ك) — أُضيف 28-10-2026 ===== */
+(function () {
+  if (window.__scFreeBarLoaded) return;
+  window.__scFreeBarLoaded = true;
+  var LIMIT = 45; // غيّر الرقم هنا إذا تغيّر حد التوصيل المجاني
+  function fmt(n) { return n.toFixed(3); }
+  function render() {
+    try {
+      var summary = document.querySelector('.ec-cart__summary');
+      if (!summary || !window.Ecwid || !Ecwid.Cart) return;
+      Ecwid.Cart.get(function (cart) {
+        var old = document.getElementById('sc-free-bar');
+        if (!cart || !cart.productsQuantity) { if (old) old.remove(); return; }
+        var ar = document.body.classList.contains('ecwid-lang-ar');
+        var sub = cart.subtotal || 0;
+        var left = LIMIT - sub;
+        var pct = Math.max(0, Math.min(100, (sub / LIMIT) * 100));
+        var msg = left > 0
+          ? (ar ? 'أضف <b>' + fmt(left) + ' د.ك</b> وتحصل على <b>توصيل مجاني</b> داخل الكويت 🚚'
+                : 'Add <b>KD' + fmt(left) + '</b> more for <b>FREE delivery</b> in Kuwait 🚚')
+          : (ar ? '🎉 مبروك! طلبك يستحق <b>التوصيل المجاني</b> داخل الكويت'
+                : '🎉 Your order qualifies for <b>FREE delivery</b> in Kuwait');
+        var bar = old;
+        if (!bar) {
+          bar = document.createElement('div');
+          bar.id = 'sc-free-bar';
+          summary.parentNode.insertBefore(bar, summary);
+        }
+        bar.setAttribute('dir', ar ? 'rtl' : 'ltr');
+        bar.style.cssText = 'margin:12px 0 16px;padding:12px 14px;border:1px solid #ffd2c2;border-radius:10px;background:#fff6f3;color:#111;font-size:14px;line-height:1.6;text-align:' + (ar ? 'right' : 'left');
+        bar.innerHTML = '<div>' + msg + '</div>' +
+          '<div style="margin-top:8px;height:6px;background:#f0e2dd;border-radius:6px;overflow:hidden">' +
+          '<div style="height:100%;width:' + pct + '%;background:#FF3300;border-radius:6px;transition:width .4s"></div></div>';
+      });
+    } catch (e) { /* لا يؤثر على باقي الموقع */ }
+  }
+  var tries = 0;
+  var wait = setInterval(function () {
+    tries++;
+    if (window.Ecwid && Ecwid.OnPageLoaded && Ecwid.OnCartChanged) {
+      clearInterval(wait);
+      Ecwid.OnPageLoaded.add(function () { setTimeout(render, 300); });
+      Ecwid.OnCartChanged.add(function () { setTimeout(render, 300); });
+      setTimeout(render, 500);
+    } else if (tries > 100) { clearInterval(wait); }
+  }, 200);
+})();
+/* ===== End free delivery bar ===== */
+
+
