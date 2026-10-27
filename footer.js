@@ -255,39 +255,48 @@
   document.head.appendChild(link);
 })();
 
-/* ===== Sea Circuit — شريط التوصيل المجاني في السلة (حد 45 د.ك) — أُضيف 28-10-2026 ===== */
+/* ===== Sea Circuit — شريط التوصيل المجاني (حد 45 د.ك) — v2 28-10-2026 ===== */
+/* يُوضع خارج مكوّنات Ecwid حتى لا يتعارض مع السلة أو "اشترِ ووفر" */
 (function () {
-  if (window.__scFreeBarLoaded) return;
-  window.__scFreeBarLoaded = true;
+  if (window.__scFreeBar2) return;
+  window.__scFreeBar2 = true;
   var LIMIT = 45; // غيّر الرقم هنا إذا تغيّر حد التوصيل المجاني
+  var TRUCK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF3300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>';
+  var CHECK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF3300" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg>';
   function fmt(n) { return n.toFixed(3); }
+  function isCartPage() { return /\/(cart|checkout)/.test(location.pathname); }
+  function remove() { var b = document.getElementById('sc-free-bar'); if (b) b.remove(); }
   function render() {
     try {
-      var summary = document.querySelector('.ec-cart__summary');
-      if (!summary || !window.Ecwid || !Ecwid.Cart) return;
+      if (!isCartPage() || !window.Ecwid || !Ecwid.Cart) { remove(); return; }
       Ecwid.Cart.get(function (cart) {
-        var old = document.getElementById('sc-free-bar');
-        if (!cart || !cart.productsQuantity) { if (old) old.remove(); return; }
+        if (!cart || !cart.productsQuantity) { remove(); return; }
+        var country = cart.shippingPerson && cart.shippingPerson.countryCode;
+        var method = (cart.shippingMethod || '').toLowerCase();
+        // لا يظهر لطلبات الخليج ولا لمن اختار الاستلام من المحل
+        if ((country && country !== 'KW') || /pickup|استلام/.test(method)) { remove(); return; }
+        var host = document.getElementById('ecwid-products');
+        if (!host || !host.parentNode) return;
         var ar = document.body.classList.contains('ecwid-lang-ar');
-        var sub = cart.subtotal || 0;
-        var left = LIMIT - sub;
-        var pct = Math.max(0, Math.min(100, (sub / LIMIT) * 100));
+        var left = LIMIT - (cart.subtotal || 0);
+        var pct = Math.max(0, Math.min(100, ((cart.subtotal || 0) / LIMIT) * 100));
         var msg = left > 0
-          ? (ar ? 'أضف <b>' + fmt(left) + ' د.ك</b> وتحصل على <b>توصيل مجاني</b> داخل الكويت 🚚'
-                : 'Add <b>KD' + fmt(left) + '</b> more for <b>FREE delivery</b> in Kuwait 🚚')
-          : (ar ? '🎉 مبروك! طلبك يستحق <b>التوصيل المجاني</b> داخل الكويت'
-                : '🎉 Your order qualifies for <b>FREE delivery</b> in Kuwait');
-        var bar = old;
+          ? (ar ? 'اشترِ بـ <b>' + fmt(left) + ' د.ك</b> إضافية واحصل على <b>توصيل مجاني</b>'
+                : 'Spend <b>KD' + fmt(left) + '</b> more and get <b>FREE delivery</b>')
+          : (ar ? 'طلبك يستحق <b>التوصيل المجاني</b>'
+                : 'Your order qualifies for <b>FREE delivery</b>');
+        var bar = document.getElementById('sc-free-bar');
         if (!bar) {
           bar = document.createElement('div');
           bar.id = 'sc-free-bar';
-          summary.parentNode.insertBefore(bar, summary);
+          host.parentNode.insertBefore(bar, host);
         }
         bar.setAttribute('dir', ar ? 'rtl' : 'ltr');
-        bar.style.cssText = 'margin:12px 0 16px;padding:12px 14px;border:1px solid #ffd2c2;border-radius:10px;background:#fff6f3;color:#111;font-size:14px;line-height:1.6;text-align:' + (ar ? 'right' : 'left');
-        bar.innerHTML = '<div>' + msg + '</div>' +
+        bar.style.cssText = 'max-width:600px;margin:0 auto 18px;padding:12px 16px;border:1px solid #ffd2c2;border-radius:10px;background:#fff6f3;color:#111;font:500 14px/1.6 inherit;';
+        bar.innerHTML =
+          '<div style="display:flex;align-items:center;gap:10px">' + (left > 0 ? TRUCK : CHECK) + '<div>' + msg + '</div></div>' +
           '<div style="margin-top:8px;height:6px;background:#f0e2dd;border-radius:6px;overflow:hidden">' +
-          '<div style="height:100%;width:' + pct + '%;background:#FF3300;border-radius:6px;transition:width .4s"></div></div>';
+          '<div style="height:100%;width:' + pct + '%;background:#FF3300;border-radius:6px"></div></div>';
       });
     } catch (e) { /* لا يؤثر على باقي الموقع */ }
   }
@@ -296,12 +305,11 @@
     tries++;
     if (window.Ecwid && Ecwid.OnPageLoaded && Ecwid.OnCartChanged) {
       clearInterval(wait);
-      Ecwid.OnPageLoaded.add(function () { setTimeout(render, 300); });
-      Ecwid.OnCartChanged.add(function () { setTimeout(render, 300); });
-      setTimeout(render, 500);
+      Ecwid.OnPageLoaded.add(function () { setTimeout(render, 400); });
+      Ecwid.OnCartChanged.add(function () { setTimeout(render, 400); });
+      setTimeout(render, 600);
     } else if (tries > 100) { clearInterval(wait); }
   }, 200);
 })();
 /* ===== End free delivery bar ===== */
-
 
